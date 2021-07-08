@@ -1,15 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Header welcome='Welcome to the URL Shortener'/>
+
+  <section class="content">
+    <UrlForm />
+  </section>
+
+  <Footer author='Luis Perez'/>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/Header.vue'
+import UrlForm from './components/UrlForm.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Header,
+    UrlForm,
+    Footer
   }
 }
 </script>
@@ -23,4 +33,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+section.content {
+  margin-bottom: 50px;
+}
+h3 {
+  margin: 40px 0 0;
+}
+
 </style>
