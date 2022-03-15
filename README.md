@@ -27,3 +27,8 @@ npm run test
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Deployed Site Address
+```
+https://luisperez1050.github.io/url_shortener/
+```
