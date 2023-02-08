@@ -1,4 +1,4 @@
-# test-u
+# URL Shortener
 
 ## Project setup
 ```

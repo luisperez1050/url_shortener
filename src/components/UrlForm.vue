@@ -1,18 +1,19 @@
 <template>
   <form v-on:submit.prevent>
       <label for="urls">URL: </label>
-      <input id="urls" type="url" v-model="inputUrl" >
-      <button v-if="inputUrl" v-on:click="shorten()" >Shorten</button>
+      <input id="urls" v-model="inputUrl" >
+      <button class="base-btn" @click="shorten()" >Shorten</button>
       <p v-if="isError" class="error-message">
           <span> {{ errorMessage }} </span>
       </p>
   </form>
 
-  <UrlList v-if="urls.length > 0" :listOfUrls="urls" v-on:deleteItem="onDeleteItem" />
+  <UrlList v-if="urls.length > 0" :listOfUrls="urls" @deleteItem="onDeleteItem" @copiedUrl="onCopy" />
 </template>
 
 <script>
-import UrlList from './UrlList.vue'
+import shortid from 'shortid';
+import UrlList from './UrlList.vue';
 
 export default {
   name: 'UrlForm',
@@ -23,6 +24,7 @@ export default {
       return {
           inputUrl: '',
           urls: [],
+          urlObject: {},
           isError: false,
           errorMessage: ''
       }
@@ -42,32 +44,23 @@ export default {
         }
       },
       shorternerLogic() {
-        let urlHolder
-        let shortenerArray = new Array()
-        let shortenerBuilder
+        const validUrl = (this.inputUrl.includes('https://') || this.inputUrl.includes('http://'));
+        const fullUrl = validUrl ? new URL(this.inputUrl) : new URL(`https://${this.inputUrl}`)
+        const shortUrl = `${fullUrl.protocol}//${shortid.generate()}`;
+        this.urlObject = { fullUrl: fullUrl.href, shortUrl, copied: false };
 
-        if (this.inputUrl.includes('https://') || this.inputUrl.includes('http://')) {
-            urlHolder = new URL(this.inputUrl)
-        } else {
-            urlHolder = new URL('https://' + this.inputUrl)
-        }
-
-        shortenerArray = urlHolder.host.split('.')
-        shortenerBuilder = urlHolder.protocol + '//'
-
-        shortenerArray.forEach(item => {
-            shortenerBuilder += item[0] + item.length
-        });
-
-        if(!this.urls.includes(shortenerBuilder)) {
-            this.urls.push(shortenerBuilder)
+        if(this.urls.filter((url) => url.fullUrl === fullUrl.href).length === 0) {
+            this.urls.push(this.urlObject);
         } else {
             this.isError = true
             this.errorMessage = "This url has already been submitted, duplicates are rejected."
         }
       },
-      onDeleteItem(url) {
-          this.urls.splice(this.urls.indexOf(url),1)
+      onCopy(index) {
+        this.urls[index].copied = true;
+      },
+      onDeleteItem(index) {
+        this.urls.splice(index, 1)
       }
   },
   mounted(){
@@ -78,7 +71,6 @@ export default {
   watch: {
       urls: {
           handler() {
-              console.log("lets see i should be stored now!!")
               localStorage.setItem('urls', JSON.stringify(this.urls))
           },
           deep: true
