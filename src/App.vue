@@ -1,27 +1,26 @@
 <template>
-  <Header welcome='Welcome to the URL Shortener'/>
+  <UrlHeader welcome="Welcome to the URL Shortener" />
 
   <section class="content">
     <UrlForm />
   </section>
 
-  <Footer author='Luis Perez'/>
-
+  <UrlFooter author="Luis Perez" />
 </template>
 
 <script>
-import Header from './components/Header.vue'
-import UrlForm from './components/UrlForm.vue'
-import Footer from './components/Footer.vue'
+import UrlHeader from "./components/UrlHeader.vue";
+import UrlForm from "./components/UrlForm.vue";
+import UrlFooter from "./components/UrlFooter.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Header,
+    UrlHeader,
     UrlForm,
-    Footer
-  }
-}
+    UrlFooter,
+  },
+};
 </script>
 
 <style>
@@ -39,5 +38,4 @@ section.content {
 h3 {
   margin: 40px 0 0;
 }
-
 </style>
